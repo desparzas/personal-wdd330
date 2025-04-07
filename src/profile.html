@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - MovieMate</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/profile.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Lato:wght@300;400;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="img/favicon.ico" type="image/x-icon">
+</head>
+<body class="light-mode">
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <a href="index.html">
+                    <i class="fas fa-film"></i>
+                    <span>MovieMate</span>
+                </a>
+            </div>
+            <div class="search-bar">
+                <input type="text" id="search-input" placeholder="Search movies, TV shows...">
+                <button id="search-button"><i class="fas fa-search"></i></button>
+            </div>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="search.html">Discover</a>
+                <a href="#" id="favorites-link">Favorites</a>
+                <div class="theme-toggle">
+                    <i class="fas fa-moon" id="theme-icon"></i>
+                </div>
+                <div class="user-menu">
+                    <div class="user-icon" id="user-icon">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="dropdown-menu" id="user-dropdown">
+                        <a href="profile.html" class="active">Profile</a>
+                        <a href="settings.html">Settings</a>
+                        <a href="#" id="logout-btn">Logout</a>
+                    </div>
+                </div>
+            </div>
+            <div class="hamburger">
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="profile-container">
+            <div class="profile-header">
+                <div class="profile-cover"></div>
+                <div class="profile-info">
+                    <div class="profile-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="profile-details">
+                        <h1 id="profile-name">John Doe</h1>
+                        <p id="profile-email">john.doe@example.com</p>
+                        <p class="profile-stats">
+                            <span id="favorites-count">24</span> Favorites
+                            <span class="separator">•</span>
+                            <span id="reviews-count">12</span> Reviews
+                        </p>
+                    </div>
+                    <button class="btn secondary-btn edit-profile-btn">
+                        <i class="fas fa-edit"></i>
+                        Edit Profile
+                    </button>
+                </div>
+            </div>
+            
+            <div class="profile-tabs">
+                <button class="profile-tab active" data-tab="favorites">Favorites</button>
+                <button class="profile-tab" data-tab="reviews">My Reviews</button>
+                <button class="profile-tab" data-tab="watchlist">Watchlist</button>
+                <button class="profile-tab" data-tab="history">Watch History</button>
+            </div>
+            
+            <div class="profile-content">
+                <div class="profile-tab-content active" id="favorites-content">
+                    <div class="section-header">
+                        <h2>My Favorites</h2>
+                        <div class="section-tabs">
+                            <button class="tab active" data-type="all">All</button>
+                            <button class="tab" data-type="movies">Movies</button>
+                            <button class="tab" data-type="tv">TV Shows</button>
+                        </div>
+                    </div>
+                    
+                    <div class="media-grid" id="favorites-grid">
+                        <!-- Favorites will be loaded dynamically -->
+                        <div class="loading-spinner"></div>
+                    </div>
+                </div>
+                
+                <div class="profile-tab-content" id="reviews-content">
+                    <div class="section-header">
+                        <h2>My Reviews</h2>
+                    </div>
+                    
+                    <div class="reviews-container" id="user-reviews-container">
+                        <!-- Reviews will be loaded dynamically -->
+                        <div class="loading-spinner"></div>
+                    </div>
+                </div>
+                
+                <div class="profile-tab-content" id="watchlist-content">
+                    <div class="section-header">
+                        <h2>My Watchlist</h2>
+                        <div class="section-tabs">
+                            <button class="tab active" data-type="all">All</button>
+                            <button class="tab" data-type="movies">Movies</button>
+                            <button class="tab" data-type="tv">TV Shows</button>
+                        </div>
+                    </div>
+                    
+                    <div class="media-grid" id="watchlist-grid">
+                        <!-- Watchlist will be loaded dynamically -->
+                        <div class="loading-spinner"></div>
+                    </div>
+                </div>
+                
+                <div class="profile-tab-content" id="history-content">
+                    <div class="section-header">
+                        <h2>Watch History</h2>
+                    </div>
+                    
+                    <div class="history-list" id="history-list">
+                        <!-- History will be loaded dynamically -->
+                        <div class="loading-spinner"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Edit Profile Modal -->
+        <div class="modal" id="edit-profile-modal">
+            <div class="modal-content">
+                <span class="close-modal" id="close-edit-profile-modal">&times;</span>
+                <h2>Edit Profile</h2>
+                <form id="edit-profile-form">
+                    <div class="form-group">
+                        <label for="edit-name">Name</label>
+                        <input type="text" id="edit-name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-email">Email</label>
+                        <input type="email" id="edit-email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-password">New Password (leave blank to keep current)</label>
+                        <input type="password" id="edit-password" name="password">
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-confirm-password">Confirm New Password</label>
+                        <input type="password" id="edit-confirm-password" name="confirm-password">
+                    </div>
+                    <button type="submit" class="btn primary-btn">Save Changes</button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">
+                <i class="fas fa-film"></i>
+                <span>MovieMate</span>
+            </div>
+            <div class="footer-links">
+                <div class="footer-column">
+                    <h3>About</h3>
+                    <a href="#">About Us</a>
+                    <a href="#">Contact</a>
+                    <a href="#">Blog</a>
+                </div>
+                <div class="footer-column">
+                    <h3>Legal</h3>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Cookie Policy</a>
+                </div>
+                <div class="footer-column">
+                    <h3>Support</h3>
+                    <a href="#">Help Center</a>
+                    <a href="#">FAQ</a>
+                    <a href="#">Feedback</a>
+                </div>
+            </div>
+            <div class="footer-social">
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-youtube"></i></a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 MovieMate. All rights reserved.</p>
+            <p>Powered by <a href="https://www.themoviedb.org/" target="_blank">TMDb</a></p>
+        </div>
+    </footer>
+
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/profile.js"></script>
+</body>
+</html>
