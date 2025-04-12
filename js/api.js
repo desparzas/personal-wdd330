@@ -54,11 +54,21 @@ class TMDbAPI {
         return await response.json();
     }
 
-    static async getGenres(mediaType = 'movie') {
-        const response = await fetch(
-            `${BASE_URL}/genre/${mediaType}/list?api_key=${API_KEY}`,
-            { headers: this.headers }
-        );
-        return await response.json();
+    static async getGenres() {
+        const [movieGenres, tvGenres] = await Promise.all([
+            fetch(`${BASE_URL}/genre/movie/list`, { headers: this.headers }),
+            fetch(`${BASE_URL}/genre/tv/list`, { headers: this.headers })
+        ]);
+
+        const movieData = await movieGenres.json();
+        const tvData = await tvGenres.json();
+
+        // Combine and deduplicate genres
+        const uniqueGenres = [...new Map([
+            ...movieData.genres,
+            ...tvData.genres
+        ].map(genre => [genre.id, genre])).values()];
+
+        return uniqueGenres;
     }
 }

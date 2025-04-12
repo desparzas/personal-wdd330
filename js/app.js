@@ -123,6 +123,96 @@ async function updateRecommendationsSection() {
     }
 }
 
+async function updateCategoriesSection() {
+    const grid = document.getElementById('categories-grid');
+    grid.innerHTML = '<div class="loading-spinner"></div>';
+
+    try {
+        const genres = await api.getGenres();
+        grid.innerHTML = '';
+
+        // Genre background images (you'll need to add these images to your project)
+        const genreImages = {
+            Action: 'action.jpg',
+            Adventure: 'adventure.jpeg',
+            Animation: 'animation.jpeg',
+            Comedy: 'comedy.jpeg',
+            Crime: 'crime.jpeg',
+            Documentary: 'documentary.jpeg',
+            Drama: 'drama.jpg',
+            Family: 'family.jpg',
+            Fantasy: 'fantasy.jpeg',
+            History: 'history.jpg',
+            Horror: 'horror.jpeg',
+            Music: 'music.webp',
+            Mystery: 'mystery.jpeg',
+            Romance: 'romance.jpg',
+            Thriller: 'thriller.jpg',
+            War: 'war.webp',
+            Kids: 'kids.jpeg',
+            News: 'crime.jpeg',
+            Reality: 'reality.jpeg',
+            Western: 'western.webp',
+            "Action & Adventure":'action.jpg',
+            "Science Fiction": 'sci fi.jpg',
+            "Sci-Fi & Fantasy":'sci fi.jpg',
+            "Soap":'music.webp',
+            "Talk":'music.webp',
+            "War & Politics":'war.webp',
+            "TV Movie":'tv-movie.jpg',
+        };
+
+        genres.forEach(genre => {
+            const card = document.createElement('div');
+            card.className = 'category-card';
+            
+            const imagePath = genreImages[genre.name] || 'default-genre.jpg';
+
+            card.innerHTML = `
+                <img src="img/genres/${imagePath}" alt="${genre.name}">
+                <div class="category-overlay">
+                    <span>${genre.name}</span>
+                </div>
+            `;
+
+            card.addEventListener('click', () => {
+                window.location.href = `search.html?genre=${genre.id}`;
+            });
+
+            grid.appendChild(card);
+        });
+    } catch (error) {
+        console.error('Error loading categories:', error);
+        grid.innerHTML = '<p>Error loading categories. Please try again later.</p>';
+    }
+}
+
+// Add this function to handle theme switching
+function setupThemeToggle() {
+    console.log('Setting up theme toggle...');
+    const themeToggle = document.querySelector('.theme-toggle');
+    const themeIcon = document.getElementById('theme-icon');
+    
+    // Check saved theme preference
+    const currentTheme = localStorage.getItem('theme') || 'light';
+    document.body.className = `${currentTheme}-mode`;
+    themeIcon.className = currentTheme === 'light' ? 'fas fa-moon' : 'fas fa-sun';
+
+    themeToggle.addEventListener('click', () => {
+        const isDarkMode = document.body.classList.contains('dark-mode');
+        const newTheme = isDarkMode ? 'light' : 'dark';
+        
+        // Update body class
+        document.body.className = `${newTheme}-mode`;
+        
+        // Update icon
+        themeIcon.className = newTheme === 'light' ? 'fas fa-moon' : 'fas fa-sun';
+        
+        // Save preference
+        localStorage.setItem('theme', newTheme);
+    });
+}
+
 async function initializeApp() {
     try {
         await db.init();
@@ -130,7 +220,8 @@ async function initializeApp() {
         // Load all sections
         const [trending] = await Promise.all([
             api.fetchTrending(currentMediaType),
-            updateRecommendationsSection()
+            updateRecommendationsSection(),
+            updateCategoriesSection()
         ]);
         
         // Update UI
@@ -138,8 +229,9 @@ async function initializeApp() {
         
         // Initialize features
         setupTrendingTabs();
-        setupSearchHandler();
+        setupThemeToggle();
         setupUIHandlers();
+        setupSearchHandler();
     } catch (error) {
         console.error('Failed to initialize app:', error);
     }
