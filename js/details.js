@@ -1,26 +1,3 @@
-const api = TMDbAPI;
-const db = new MovieMateDB();
-
-// Theme toggle functionality
-function setupThemeToggle() {
-    const themeToggle = document.querySelector('.theme-toggle');
-    const themeIcon = document.getElementById('theme-icon');
-    
-    // Check saved theme preference
-    const currentTheme = localStorage.getItem('theme') || 'light';
-    document.body.className = `${currentTheme}-mode`;
-    themeIcon.className = currentTheme === 'light' ? 'fas fa-moon' : 'fas fa-sun';
-
-    themeToggle.addEventListener('click', () => {
-        const isDarkMode = document.body.classList.contains('dark-mode');
-        const newTheme = isDarkMode ? 'light' : 'dark';
-        
-        document.body.className = `${newTheme}-mode`;
-        themeIcon.className = newTheme === 'light' ? 'fas fa-moon' : 'fas fa-sun';
-        localStorage.setItem('theme', newTheme);
-    });
-}
-
 // Setup UI handlers (search, user menu, etc.)
 function setupUIHandlers() {
     // Search functionality
@@ -164,29 +141,42 @@ function setupSearchHandler() {
     }
 }
 
-function setupThemeToggle() {
-    const themeToggle = document.querySelector('.theme-toggle');
-    const themeIcon = document.getElementById('theme-icon');
-    
-    // Check saved theme preference
-    const currentTheme = localStorage.getItem('theme') || 'light';
-    document.body.className = `${currentTheme}-mode`;
-    themeIcon.className = currentTheme === 'light' ? 'fas fa-moon' : 'fas fa-sun';
+function setupMediaInteractions() {
+    // Add favorite functionality
+    const favoriteBtn = document.createElement('button');
+    favoriteBtn.className = 'favorite-btn';
+    favoriteBtn.innerHTML = '<i class="fas fa-heart"></i>';
+    document.querySelector('.details-poster').appendChild(favoriteBtn);
 
-    themeToggle.addEventListener('click', () => {
-        const isDarkMode = document.body.classList.contains('dark-mode');
-        const newTheme = isDarkMode ? 'light' : 'dark';
-        
-        document.body.className = `${newTheme}-mode`;
-        themeIcon.className = newTheme === 'light' ? 'fas fa-moon' : 'fas fa-sun';
-        localStorage.setItem('theme', newTheme);
+    favoriteBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const isFavorite = favoriteBtn.classList.toggle('active');
+        // Save to favorites in local storage
+        const mediaId = new URLSearchParams(window.location.search).get('id');
+        const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+        if (isFavorite) {
+            favorites.push(mediaId);
+        } else {
+            const index = favorites.indexOf(mediaId);
+            if (index > -1) favorites.splice(index, 1);
+        }
+        localStorage.setItem('favorites', JSON.stringify(favorites));
+    });
+
+    // Add rating interaction
+    const ratingStars = document.querySelector('.rating');
+    ratingStars.style.cursor = 'pointer';
+    ratingStars.addEventListener('mouseover', () => {
+        ratingStars.style.transform = 'scale(1.1)';
+    });
+    ratingStars.addEventListener('mouseout', () => {
+        ratingStars.style.transform = 'scale(1)';
     });
 }
 
+// Add to initialization
 // Initialize the page
 document.addEventListener('DOMContentLoaded', async () => {
-    await db.init();
-    setupSearchHandler(); // Add search functionality
-    setupThemeToggle(); // Add theme toggle functionality
+    setupSearchHandler();
     loadMediaDetails();
 });

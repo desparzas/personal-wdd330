@@ -1,3 +1,9 @@
+// Initialize the page
+document.addEventListener('DOMContentLoaded', async () => {
+    loadTrendingMedia();
+    loadPopularMedia();
+});
+
 function setupGenreLinks() {
     document.querySelectorAll('.genre-card').forEach(card => {
         card.addEventListener('click', () => {

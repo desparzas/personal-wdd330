@@ -1,4 +1,3 @@
-const db = new MovieMateDB();
 let api = TMDbAPI;
 let currentMediaType = 'all';
 
@@ -187,9 +186,8 @@ async function updateCategoriesSection() {
     }
 }
 
-// Add this function to handle theme switching
+// Theme toggle functionality
 function setupThemeToggle() {
-    console.log('Setting up theme toggle...');
     const themeToggle = document.querySelector('.theme-toggle');
     const themeIcon = document.getElementById('theme-icon');
     
@@ -202,13 +200,8 @@ function setupThemeToggle() {
         const isDarkMode = document.body.classList.contains('dark-mode');
         const newTheme = isDarkMode ? 'light' : 'dark';
         
-        // Update body class
         document.body.className = `${newTheme}-mode`;
-        
-        // Update icon
         themeIcon.className = newTheme === 'light' ? 'fas fa-moon' : 'fas fa-sun';
-        
-        // Save preference
         localStorage.setItem('theme', newTheme);
     });
 }
@@ -239,7 +232,7 @@ function setupSearchHandler() {
 
 async function initializeApp() {
     try {
-        await db.init();
+        const db = new MovieMateDB();
         
         // Load all sections
         const [trending] = await Promise.all([

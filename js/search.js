@@ -1,5 +1,4 @@
-const api = TMDbAPI;
-const db = new MovieMateDB();
+let api = TMDbAPI;
 
 let currentPage = 1;
 let currentQuery = '';
@@ -151,25 +150,7 @@ loadMoreBtn.addEventListener('click', async () => {
     isLoading = false;
 });
 
-// Theme toggle functionality
-function setupThemeToggle() {
-    const themeToggle = document.querySelector('.theme-toggle');
-    const themeIcon = document.getElementById('theme-icon');
-    
-    // Check saved theme preference
-    const currentTheme = localStorage.getItem('theme') || 'light';
-    document.body.className = `${currentTheme}-mode`;
-    themeIcon.className = currentTheme === 'light' ? 'fas fa-moon' : 'fas fa-sun';
 
-    themeToggle.addEventListener('click', () => {
-        const isDarkMode = document.body.classList.contains('dark-mode');
-        const newTheme = isDarkMode ? 'light' : 'dark';
-        
-        document.body.className = `${newTheme}-mode`;
-        themeIcon.className = newTheme === 'light' ? 'fas fa-moon' : 'fas fa-sun';
-        localStorage.setItem('theme', newTheme);
-    });
-}
 
 function setupSearchHandler() {
     const searchInput = document.getElementById('search-input');
@@ -195,8 +176,6 @@ function setupSearchHandler() {
 
 // Initialize the page
 document.addEventListener('DOMContentLoaded', async () => {
-    await db.init();
     initializeSearch();
-    setupThemeToggle();
     setupSearchHandler();
 });
