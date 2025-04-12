@@ -308,4 +308,17 @@ class UI {
                 if (isActive) {
                     // Remove from favorites
                     window.auth.removeFromFavorites(media.id, mediaType);
-                    favoriteBtn
+                    favoriteBtn.classList.remove('active');
+                    favoriteBtn.querySelector('i').className = 'far fa-heart';
+                } else {
+                    // Add to favorites
+                    window.auth.addToFavorites(media);
+                    favoriteBtn.classList.add('active');
+                    favoriteBtn.querySelector('i').className = 'fas fa-heart';
+                }
+            });
+        }
+
+        return card;
+    }
+}
