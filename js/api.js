@@ -81,4 +81,83 @@ class TMDbAPI {
 
         return uniqueGenres;
     }
+
+    static async getGenres2(type) {
+        const url = `${BASE_URL}/genre/${type}/list`;
+        console.log("url", url);
+        const response = await fetch(url, {
+            headers: this.headers
+        });
+        const data = await response.json();
+        console.log("miau", data);
+        return data.genres;
+    }
+
+    static async searchMedia(query = '', type = 'all', page = 1, genre = '') {
+        let endpoint = '';
+        let params = `page=${page}`;
+        
+        if (query) {
+            params += `&query=${encodeURIComponent(query)}`;
+        }
+        
+        if (genre) {
+            params += `&with_genres=${genre}`;
+            if (!query) {
+                if (type === 'movie' || type === 'all') {
+                    endpoint = `/discover/movie?${params}`;
+                    return this.fetchFromEndpoint(endpoint).then(data => ({
+                        ...data,
+                        results: data.results.map(item => ({
+                            ...item,
+                            media_type: 'movie'
+                        }))
+                    }));
+                } else if (type === 'tv') {
+                    endpoint = `/discover/tv?${params}`;
+                    return this.fetchFromEndpoint(endpoint).then(data => ({
+                        ...data,
+                        results: data.results.map(item => ({
+                            ...item,
+                            media_type: 'tv'
+                        }))
+                    }));
+                }
+            }
+        }
+        
+        if (query) {
+            if (type === 'all') {
+                endpoint = `/search/multi?${params}`;
+            } else if (type === 'movie') {
+                endpoint = `/search/movie?${params}`;
+            } else if (type === 'tv') {
+                endpoint = `/search/tv?${params}`;
+            }
+        }
+    
+        const response = await fetch(`${BASE_URL}${endpoint}`, {
+            headers: this.headers
+        });
+    
+        const data = await response.json();
+        
+        // Add media_type to results if not present
+        if (type !== 'all') {
+            data.results = data.results.map(item => ({
+                ...item,
+                media_type: type
+            }));
+        }
+    
+        return data;
+    }
+
+    // Helper method for fetching from endpoint
+    static async fetchFromEndpoint(endpoint) {
+        const response = await fetch(`${BASE_URL}${endpoint}`, {
+            headers: this.headers
+        });
+        return response.json();
+    }
 }

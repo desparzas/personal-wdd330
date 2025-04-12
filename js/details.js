@@ -142,10 +142,51 @@ function updateDetailsUI(media, mediaType) {
     }
 }
 
+function setupSearchHandler() {
+    const searchInput = document.getElementById('search-input');
+    const searchButton = document.getElementById('search-button');
+
+    searchButton.addEventListener('click', () => {
+        performSearch();
+    });
+
+    searchInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            performSearch();
+        }
+    });
+
+    function performSearch() {
+        const query = searchInput.value.trim();
+        if (query) {
+            window.location.href = `search.html?query=${encodeURIComponent(query)}`;
+        }
+    }
+}
+
+function setupThemeToggle() {
+    const themeToggle = document.querySelector('.theme-toggle');
+    const themeIcon = document.getElementById('theme-icon');
+    
+    // Check saved theme preference
+    const currentTheme = localStorage.getItem('theme') || 'light';
+    document.body.className = `${currentTheme}-mode`;
+    themeIcon.className = currentTheme === 'light' ? 'fas fa-moon' : 'fas fa-sun';
+
+    themeToggle.addEventListener('click', () => {
+        const isDarkMode = document.body.classList.contains('dark-mode');
+        const newTheme = isDarkMode ? 'light' : 'dark';
+        
+        document.body.className = `${newTheme}-mode`;
+        themeIcon.className = newTheme === 'light' ? 'fas fa-moon' : 'fas fa-sun';
+        localStorage.setItem('theme', newTheme);
+    });
+}
+
 // Initialize the page
 document.addEventListener('DOMContentLoaded', async () => {
     await db.init();
+    setupSearchHandler(); // Add search functionality
+    setupThemeToggle(); // Add theme toggle functionality
     loadMediaDetails();
-    setupThemeToggle();
-    setupUIHandlers();
 });
