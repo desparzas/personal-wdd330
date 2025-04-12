@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MovieMate - Details</title>
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/details.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Lato:wght@300;400;700&display=swap">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="icon" href="img/favicon.ico" type="image/x-icon">
@@ -85,7 +86,11 @@
                     </div>
                     <div class="details-similar">
                         <h2>Similar Titles</h2>
-                        <div class="media-slider"></div>
+                        <div class="similar-slider-wrapper">
+                            <div class="similar-slider-container">
+                                <div class="media-slider" id="similar-slider"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -93,7 +98,42 @@
     </main>
 
     <footer>
-        <!-- Same footer as index.html -->
+        <div class="footer-content">
+            <div class="footer-logo">
+                <i class="fas fa-film"></i>
+                <span>MovieMate</span>
+            </div>
+            <div class="footer-links">
+                <div class="footer-column">
+                    <h3>About</h3>
+                    <a href="#">About Us</a>
+                    <a href="#">Contact</a>
+                    <a href="#">Blog</a>
+                </div>
+                <div class="footer-column">
+                    <h3>Legal</h3>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Cookie Policy</a>
+                </div>
+                <div class="footer-column">
+                    <h3>Support</h3>
+                    <a href="#">Help Center</a>
+                    <a href="#">FAQ</a>
+                    <a href="#">Feedback</a>
+                </div>
+            </div>
+            <div class="footer-social">
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-youtube"></i></a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 MovieMate. All rights reserved.</p>
+            <p>Powered by <a href="https://www.themoviedb.org/" target="_blank">TMDb</a></p>
+        </div>
     </footer>
 
     <script src="js/api.js"></script>

@@ -1,6 +1,56 @@
 const api = TMDbAPI;
 const db = new MovieMateDB();
 
+// Theme toggle functionality
+function setupThemeToggle() {
+    const themeToggle = document.querySelector('.theme-toggle');
+    const themeIcon = document.getElementById('theme-icon');
+    
+    // Check saved theme preference
+    const currentTheme = localStorage.getItem('theme') || 'light';
+    document.body.className = `${currentTheme}-mode`;
+    themeIcon.className = currentTheme === 'light' ? 'fas fa-moon' : 'fas fa-sun';
+
+    themeToggle.addEventListener('click', () => {
+        const isDarkMode = document.body.classList.contains('dark-mode');
+        const newTheme = isDarkMode ? 'light' : 'dark';
+        
+        document.body.className = `${newTheme}-mode`;
+        themeIcon.className = newTheme === 'light' ? 'fas fa-moon' : 'fas fa-sun';
+        localStorage.setItem('theme', newTheme);
+    });
+}
+
+// Setup UI handlers (search, user menu, etc.)
+function setupUIHandlers() {
+    // Search functionality
+    const searchForm = document.querySelector('.search-bar');
+    searchForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const searchQuery = searchForm.querySelector('input').value.trim();
+        if (searchQuery) {
+            window.location.href = `search.html?query=${encodeURIComponent(searchQuery)}`;
+        }
+    });
+
+    // User menu toggle
+    const userIcon = document.querySelector('.user-icon');
+    const dropdownMenu = document.querySelector('.dropdown-menu');
+    
+    if (userIcon && dropdownMenu) {
+        userIcon.addEventListener('click', () => {
+            dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!userIcon.contains(e.target)) {
+                dropdownMenu.style.display = 'none';
+            }
+        });
+    }
+}
+
 async function loadMediaDetails() {
     const urlParams = new URLSearchParams(window.location.search);
     const mediaId = urlParams.get('id');
@@ -97,4 +147,5 @@ document.addEventListener('DOMContentLoaded', async () => {
     await db.init();
     loadMediaDetails();
     setupThemeToggle();
+    setupUIHandlers();
 });
