@@ -213,6 +213,30 @@ function setupThemeToggle() {
     });
 }
 
+function setupSearchHandler() {
+    const searchInput = document.getElementById('search-input');
+    const searchButton = document.getElementById('search-button');
+
+    // Handle search button click
+    searchButton.addEventListener('click', () => {
+        performSearch();
+    });
+
+    // Handle Enter key press
+    searchInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            performSearch();
+        }
+    });
+
+    function performSearch() {
+        const query = searchInput.value.trim();
+        if (query) {
+            window.location.href = `search.html?query=${encodeURIComponent(query)}`;
+        }
+    }
+}
+
 async function initializeApp() {
     try {
         await db.init();
@@ -229,9 +253,10 @@ async function initializeApp() {
         
         // Initialize features
         setupTrendingTabs();
+        setupSearchHandler();
         setupThemeToggle();
         setupUIHandlers();
-        setupSearchHandler();
+
     } catch (error) {
         console.error('Failed to initialize app:', error);
     }

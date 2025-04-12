@@ -18,12 +18,22 @@ class TMDbAPI {
         return await response.json();
     }
 
-    static async searchMedia(query, page = 1) {
-        const response = await fetch(
-            `${BASE_URL}/search/multi?query=${encodeURIComponent(query)}&page=${page}`,
-            { headers: this.headers }
-        );
-        return await response.json();
+    static async searchMedia(query, type = 'all', page = 1) {
+        let endpoint = '';
+        
+        if (type === 'all') {
+            endpoint = `/search/multi?query=${encodeURIComponent(query)}&page=${page}`;
+        } else if (type === 'movie') {
+            endpoint = `/search/movie?query=${encodeURIComponent(query)}&page=${page}`;
+        } else if (type === 'tv') {
+            endpoint = `/search/tv?query=${encodeURIComponent(query)}&page=${page}`;
+        }
+
+        const response = await fetch(`${BASE_URL}${endpoint}`, {
+            headers: this.headers
+        });
+
+        return response.json();
     }
 
     static async getMediaDetails(mediaType, id) {
